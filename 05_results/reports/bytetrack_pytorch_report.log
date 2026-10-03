@@ -1,0 +1,60 @@
+======================================================================
+YOLO11m + ByteTrack PERFORMANCE REPORT
+======================================================================
+
+MODEL
+----------------------------------------------------------------------
+Model              : YOLO11m
+Format             : PyTorch
+Tracker            : ByteTrack
+Model Size         : 38.8 MB
+Model Load Time    : 0.233 sec
+
+VIDEO
+----------------------------------------------------------------------
+Resolution         : 1920x1080
+Input FPS          : 29.0
+Total Frames       : 998
+
+PERFORMANCE
+----------------------------------------------------------------------
+Total Processing Time : 807.79 sec
+Average FPS           : 1.24
+Average Latency       : 756.8 ms
+P95 Latency           : 987.26 ms
+
+DETECTIONS
+----------------------------------------------------------------------
+Total Detections      : 12470
+Average Detections/Frame : 12.49
+
+TRACKING
+----------------------------------------------------------------------
+Unique Track IDs      : 45
+Average Active Tracks : 12.49
+Maximum Active Tracks : 18
+Average Track Lifetime: 277.11 frames
+Longest Track Lifetime: 998 frames
+ID Switches           : N/A - ground-truth tracking annotations not available
+Track Loss Events     : 97
+
+SYSTEM
+----------------------------------------------------------------------
+Average CPU           : 240.7%
+Peak CPU              : 303.7%
+Average GPU           : N/A - CPU-only system
+Peak GPU              : N/A - CPU-only system
+Average RAM           : 675.36 MB
+Peak RAM              : 692.73 MB
+Peak GPU Memory       : N/A - CPU-only system
+
+OUTPUT
+----------------------------------------------------------------------
+Output Video Size     : 57.39 MB
+Output Video          : 05_results\pytorch\bytetrack_output.mp4
+JSON Report           : 05_results\reports\bytetrack_pytorch_report.json
+Log File              : 05_results\reports\bytetrack_pytorch_report.log
+
+======================================================================
+END OF REPORT
+======================================================================

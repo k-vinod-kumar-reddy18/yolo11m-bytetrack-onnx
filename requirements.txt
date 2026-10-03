@@ -1,0 +1,7 @@
+ultralytics
+onnx
+onnxruntime
+onnxslim
+opencv-python
+psutil
+numpy
