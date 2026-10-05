@@ -1,6 +1,9 @@
-YOLO11m + ByteTrack + ONNX
+# YOLO11m + ByteTrack + ONNX
+
 YOLO11m object detection and ByteTrack multi-object tracking with PyTorch and ONNX performance benchmarking.
-Features
+
+## Features
+
 - YOLO11m object detection
 - ByteTrack object tracking
 - PyTorch inference
@@ -11,7 +14,9 @@ Features
 - CPU, GPU and RAM monitoring
 - Output video generation
 - JSON and LOG performance reports
-Project Structure
+
+## Project Structure
+
 yolo11m-bytetrack-onnx/
 ├── 01_model/
 ├── 02_input/
@@ -23,17 +28,22 @@ yolo11m-bytetrack-onnx/
 │   └── reports/
 └── requirements.txt
 
-Run PyTorch
+## Run PyTorch
+
 .\.venv\Scripts\python.exe .\03_bytetrack\run_bytetrack.py
 
-Convert to ONNX
+## Convert to ONNX
+
 .\.venv\Scripts\python.exe .\04_onnx\export_onnx.py
 
-Run ONNX
+## Run ONNX
+
 .\.venv\Scripts\python.exe .\04_onnx\onnx_bytetrack.py
 
-Metrics
+## Metrics
+
 The generated reports contain:
+
 - Total Processing Time
 - Average FPS
 - Average Latency
@@ -52,7 +62,9 @@ The generated reports contain:
 - Average/Peak RAM
 - Peak GPU Memory
 - Output Video Size
-Outputs
+
+## Outputs
+
 05_results/
 ├── pytorch/
 │   └── bytetrack_output.mp4
@@ -64,5 +76,6 @@ Outputs
     ├── bytetrack_onnx_report.json
     └── bytetrack_onnx_report.log
 
-Technologies
+## Technologies
+
 Python | YOLO11m | ByteTrack | ONNX | ONNX Runtime | OpenCV | PyTorch | NumPy | psutil

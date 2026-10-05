@@ -1,59 +1,54 @@
 {
-    "experiment": {
-        "model": "YOLO11m",
-        "format": "PyTorch",
-        "tracker": "ByteTrack",
-        "input_video": "./02_input/videos/PNNL_Parking_LOT(1).mp4",
-        "output_video": "05_results\\pytorch\\bytetrack_output.mp4"
+    "project": {
+        "name": "YOLO11m + ByteTrack Object Tracking",
+        "tracker": "ByteTrack"
     },
     "model": {
-        "model_size_mb": 38.8,
-        "model_load_time_sec": 0.233
+        "name": "YOLO11m",
+        "format": "pt",
+        "path": "C:\\Users\\VinodKumarReddy\\Downloads\\yolo11m_bytetrack_onnx\\01_model\\yolo11m.pt"
+    },
+    "configuration": {
+        "confidence_threshold": 0.25,
+        "iou_threshold": 0.5,
+        "tracker_config": "ByteTrack",
+        "device": "CPU"
     },
     "video": {
-        "resolution": "1920x1080",
-        "input_fps": 29.0,
+        "input": "C:\\Users\\VinodKumarReddy\\Downloads\\yolo11m_bytetrack_onnx\\02_input\\videos\\PNNL_Parking_LOT(1).mp4",
+        "width": 1920,
+        "height": 1080,
+        "fps": 29.0,
         "total_frames": 998
     },
-    "performance": {
-        "total_processing_time_sec": 807.79,
-        "average_fps": 1.24,
-        "average_latency_ms": 756.8,
-        "p95_latency_ms": 987.26
-    },
-    "detections": {
+    "tracking_statistics": {
+        "frame_count": 998,
         "total_detections": 12470,
-        "average_detections_per_frame": 12.49
-    },
-    "tracking": {
         "unique_track_ids": 45,
-        "average_active_tracks": 12.49,
+        "average_active_tracks": 12.49498998,
         "maximum_active_tracks": 18,
-        "average_track_lifetime_frames": 277.11,
-        "longest_track_lifetime_frames": 998,
-        "id_switches": "N/A - ground-truth tracking annotations not available",
-        "track_loss_events": 97
+        "average_track_lifetime": 284.7555555556,
+        "longest_track_lifetime": 998,
+        "average_fps": 1.3891637384,
+        "average_latency_ms": 667.1717738479,
+        "p95_latency_ms": 866.8517000042,
+        "total_processing_time_seconds": 718.4178311
     },
-    "system": {
-        "average_cpu_percent": 240.7,
-        "peak_cpu_percent": 303.7,
-        "average_gpu_percent": "N/A - CPU-only system",
-        "peak_gpu_percent": "N/A - CPU-only system",
-        "average_ram_mb": 675.36,
-        "peak_ram_mb": 692.73,
-        "peak_gpu_memory_mb": "N/A - CPU-only system"
+    "resources": {
+        "process": {
+            "average_cpu_percent": 0.0,
+            "peak_cpu_percent": 0.0,
+            "average_ram_mb": 681.0051196142,
+            "peak_ram_mb": 696.796875
+        },
+        "system": {
+            "average_cpu_percent": 92.5073146293,
+            "peak_cpu_percent": 100.0
+        }
     },
-    "output": {
-        "video_size_mb": 57.39,
-        "video_path": "05_results\\pytorch\\bytetrack_output.mp4",
-        "json_report": "05_results\\reports\\bytetrack_pytorch_report.json",
-        "log_file": "05_results\\reports\\bytetrack_pytorch_report.log"
-    },
-    "notes": [
-        "CPU percentages may exceed 100% because psutil reports process utilization across CPU cores.",
-        "GPU metrics are N/A because this system is running without CUDA GPU.",
-        "ID switches require ground-truth tracking annotations and are therefore not calculated.",
-        "Track loss events represent disappearance of an active track between consecutive frames and are not equivalent to formal ID-switch evaluation.",
-        "Track lifetime is measured in frames."
-    ]
+    "outputs": {
+        "video": "C:\\Users\\VinodKumarReddy\\Downloads\\yolo11m_bytetrack_onnx\\05_results\\pytorch\\bytetrack_output.mp4",
+        "json": "C:\\Users\\VinodKumarReddy\\Downloads\\yolo11m_bytetrack_onnx\\05_results\\reports\\bytetrack_pytorch_report.json",
+        "log": "C:\\Users\\VinodKumarReddy\\Downloads\\yolo11m_bytetrack_onnx\\05_results\\reports\\bytetrack_pytorch_report.log"
+    }
 }
