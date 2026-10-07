@@ -6,80 +6,109 @@ YOLO11m + ByteTrack OBJECT TRACKING REPORT
 
 PROJECT
 ----------------------------------------------------------------------
+
 Name                 : YOLO11m + ByteTrack Object Tracking
+
 Tracker              : ByteTrack
 
 
 MODEL
 ----------------------------------------------------------------------
+
 Name                 : YOLO11m
+
 Format               : ONNX
+
 Model Path           : C:\Users\VinodKumarReddy\Downloads\yolo11m_bytetrack_onnx\01_model\yolo11m.onnx
-Model Load Time      : 0.004358 sec
+
+Model Load Time      : 0.005916 sec
 
 
 CONFIGURATION
 ----------------------------------------------------------------------
+
 Confidence Threshold : 0.25
+
 IoU Threshold        : 0.5
+
 Tracker Config       : ByteTrack
+
 Device               : CPU
 
 
 VIDEO
 ----------------------------------------------------------------------
+
 Input                : C:\Users\VinodKumarReddy\Downloads\yolo11m_bytetrack_onnx\02_input\videos\PNNL_Parking_LOT(1).mp4
+
 Resolution           : 1920x1080
+
 FPS                  : 29.00
+
 Total Frames         : 998
 
 
 TRACKING STATISTICS
 ----------------------------------------------------------------------
+
 Frame Count              : 998
+
 Total Detections         : 12638
+
 Unique Track IDs         : 47
+
 Average Active Tracks    : 12.6633266533
+
 Maximum Active Tracks    : 18
+
 Average Track Lifetime   : 275.0000000000
+
 Longest Track Lifetime   : 998
+
 Track Loss Events        : 99
 
 
 PERFORMANCE
 ----------------------------------------------------------------------
-Average FPS              : 1.1141539005
-Average Latency          : 847.6113774548 ms
-P95 Latency              : 1123.2947999961 ms
-Total Processing Time    : 895.7469875000 sec
-Pipeline Wall Time       : 895.8052277000 sec
+
+Average FPS              : 1.1855343218
+
+Average Latency          : 789.2317511022 ms
+
+P95 Latency              : 1072.9893999996 ms
+
+Total Processing Time    : 841.8145149000 sec
+
+Pipeline Wall Time       : 841.8676655000 sec
 
 
 RESOURCES - PROCESS
 ----------------------------------------------------------------------
-Average CPU              : 0.0000000000%
-Peak CPU                 : 0.0000000000%
-Average RAM              : 836.8987271418 MB
-Peak RAM                 : 845.5273437500 MB
+
+Average CPU              : 243.8975951904%
+
+Peak CPU                 : 283.5000000000%
+
+Average RAM              : 834.9817995366 MB
+
+Peak RAM                 : 845.8046875000 MB
 
 
 RESOURCES - SYSTEM
 ----------------------------------------------------------------------
-Average CPU              : 78.4509018036%
+
+Average CPU              : 75.5096192385%
+
 Peak CPU                 : 100.0000000000%
-
-
-GPU
-----------------------------------------------------------------------
-Average GPU              : N/A - CPU-only system
-Peak GPU                 : N/A - CPU-only system
-Peak GPU Memory          : N/A - CPU-only system
 
 
 OUTPUTS
 ----------------------------------------------------------------------
+
 Output Video             : C:\Users\VinodKumarReddy\Downloads\yolo11m_bytetrack_onnx\05_results\onnx\bytetrack_onnx_output.mp4
+
 JSON Report              : C:\Users\VinodKumarReddy\Downloads\yolo11m_bytetrack_onnx\05_results\reports\bytetrack_onnx_report.json
+
 Log File                 : C:\Users\VinodKumarReddy\Downloads\yolo11m_bytetrack_onnx\05_results\reports\bytetrack_onnx_report.log
 
 

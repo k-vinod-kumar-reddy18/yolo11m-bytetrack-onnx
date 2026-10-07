@@ -1,0 +1,25 @@
+services:
+
+  pytorch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yolo11m-bytetrack-onnx:latest
+    container_name: yolo11m-bytetrack-pytorch
+    command: python 03_bytetrack/run_bytetrack.py
+    volumes:
+      - ./05_results:/app/05_results
+      - ./06_logs:/app/06_logs
+    restart: "no"
+
+  onnx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yolo11m-bytetrack-onnx:latest
+    container_name: yolo11m-bytetrack-onnx
+    command: python 04_onnx/onnx_bytetrack.py
+    volumes:
+      - ./05_results:/app/05_results
+      - ./06_logs:/app/06_logs
+    restart: "no"

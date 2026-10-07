@@ -71,8 +71,11 @@ os.makedirs(
 
 pipeline_start = time.perf_counter()
 
+
 print("=" * 70)
+
 print("YOLO11m + ByteTrack - ONNX")
+
 print("=" * 70)
 
 
@@ -81,18 +84,28 @@ print("=" * 70)
 # ============================================================
 
 print()
+
 print("Loading YOLO11m ONNX model...")
+
 
 model_load_start = time.perf_counter()
 
-model = YOLO(MODEL_PATH)
+
+model = YOLO(
+    MODEL_PATH
+)
+
 
 model_load_time = (
     time.perf_counter()
     - model_load_start
 )
 
-print("YOLO11m ONNX loaded successfully")
+
+print(
+    "YOLO11m ONNX loaded successfully"
+)
+
 
 print(
     f"Model Load Time: "
@@ -104,7 +117,10 @@ print(
 # OPEN VIDEO
 # ============================================================
 
-cap = cv2.VideoCapture(VIDEO_PATH)
+cap = cv2.VideoCapture(
+    VIDEO_PATH
+)
+
 
 if not cap.isOpened():
 
@@ -117,17 +133,20 @@ fps_input = cap.get(
     cv2.CAP_PROP_FPS
 )
 
+
 width = int(
     cap.get(
         cv2.CAP_PROP_FRAME_WIDTH
     )
 )
 
+
 height = int(
     cap.get(
         cv2.CAP_PROP_FRAME_HEIGHT
     )
 )
+
 
 total_frames_expected = int(
     cap.get(
@@ -137,15 +156,18 @@ total_frames_expected = int(
 
 
 print()
+
 print(
     f"Video Resolution: "
     f"{width}x{height}"
 )
 
+
 print(
     f"Input FPS: "
     f"{fps_input}"
 )
+
 
 print(
     f"Total Frames: "
@@ -161,12 +183,14 @@ fourcc = cv2.VideoWriter_fourcc(
     *"mp4v"
 )
 
+
 out = cv2.VideoWriter(
     OUTPUT_VIDEO,
     fourcc,
     fps_input,
     (width, height)
 )
+
 
 if not out.isOpened():
 
@@ -190,21 +214,49 @@ system_cpu_values = []
 
 ram_values = []
 
+
 total_detections = 0
 
 unique_track_ids = set()
 
 active_track_counts = []
 
+
 track_first_frame = {}
 
 track_last_frame = {}
+
 
 previous_active_ids = set()
 
 track_loss_events = 0
 
+
 frame_count = 0
+
+
+# ============================================================
+# PROCESS MONITOR
+# ============================================================
+# IMPORTANT:
+# Create the Process object ONCE before the loop.
+# Do NOT create it inside every frame.
+
+process = psutil.Process(
+    os.getpid()
+)
+
+
+# Initialize process CPU measurement
+process.cpu_percent(
+    interval=None
+)
+
+
+# Initialize system CPU measurement
+psutil.cpu_percent(
+    interval=None
+)
 
 
 # ============================================================
@@ -218,7 +270,9 @@ while True:
 
     ret, frame = cap.read()
 
+
     if not ret:
+
         break
 
 
@@ -230,16 +284,26 @@ while True:
     # ========================================================
 
     results = model.track(
+
         frame,
+
         tracker=TRACKER,
+
         persist=True,
+
         conf=CONF,
+
         iou=IOU,
+
         device=DEVICE,
+
         verbose=False
+
     )
 
+
     result = results[0]
+
 
     current_ids = set()
 
@@ -254,9 +318,15 @@ while True:
 
         boxes = result.boxes
 
-        detection_count = len(boxes)
 
-        total_detections += detection_count
+        detection_count = len(
+            boxes
+        )
+
+
+        total_detections += (
+            detection_count
+        )
 
 
         if boxes.id is not None:
@@ -271,11 +341,15 @@ while True:
 
             for track_id in ids:
 
-                track_id = int(track_id)
+                track_id = int(
+                    track_id
+                )
+
 
                 current_ids.add(
                     track_id
                 )
+
 
                 unique_track_ids.add(
                     track_id
@@ -315,9 +389,11 @@ while True:
         - current_ids
     )
 
+
     track_loss_events += len(
         lost_ids
     )
+
 
     previous_active_ids = (
         current_ids
@@ -327,22 +403,19 @@ while True:
     # ========================================================
     # RESOURCE MONITORING
     # ========================================================
+    # IMPORTANT:
+    # Process object was created BEFORE the loop.
+    # This now gives proper process CPU measurements.
 
-    process = psutil.Process(
-        os.getpid()
+    process_cpu = process.cpu_percent(
+        interval=None
     )
 
-    process_cpu = (
-        process.cpu_percent(
-            interval=None
-        )
+
+    system_cpu = psutil.cpu_percent(
+        interval=None
     )
 
-    system_cpu = (
-        psutil.cpu_percent(
-            interval=None
-        )
-    )
 
     ram_mb = (
         process.memory_info().rss
@@ -354,9 +427,11 @@ while True:
         process_cpu
     )
 
+
     system_cpu_values.append(
         system_cpu
     )
+
 
     ram_values.append(
         ram_mb
@@ -372,9 +447,11 @@ while True:
         - frame_start
     )
 
+
     latencies.append(
         frame_latency
     )
+
 
     frame_count += 1
 
@@ -383,7 +460,9 @@ while True:
     # DRAW OUTPUT
     # ========================================================
 
-    annotated_frame = result.plot()
+    annotated_frame = (
+        result.plot()
+    )
 
 
     # ========================================================
@@ -402,23 +481,35 @@ while True:
     if SHOW_WINDOW:
 
         display_frame = cv2.resize(
+
             annotated_frame,
+
             (
                 DISPLAY_WIDTH,
                 DISPLAY_HEIGHT
             )
+
         )
+
 
         cv2.imshow(
+
             WINDOW_NAME,
+
             display_frame
+
         )
 
-        key = cv2.waitKey(1) & 0xFF
+
+        key = cv2.waitKey(
+            1
+        ) & 0xFF
+
 
         if key == ord("q"):
 
             print()
+
             print(
                 "Q pressed. "
                 "Stopping processing..."
@@ -433,10 +524,12 @@ while True:
 
 processing_end = time.perf_counter()
 
+
 total_processing_time = (
     processing_end
     - processing_start
 )
+
 
 pipeline_wall_time = (
     time.perf_counter()
@@ -457,12 +550,13 @@ cv2.destroyAllWindows()
 
 average_fps = (
 
-    frame_count /
-    total_processing_time
+    frame_count
+    / total_processing_time
 
     if total_processing_time > 0
 
     else 0
+
 )
 
 
@@ -474,6 +568,7 @@ average_latency_ms = (
     if latencies
 
     else 0
+
 )
 
 
@@ -487,10 +582,12 @@ if latencies:
         latencies
     )
 
+
     p95_index = int(
-        0.95 *
-        len(sorted_latencies)
+        0.95
+        * len(sorted_latencies)
     )
+
 
     if p95_index >= len(
         sorted_latencies
@@ -501,11 +598,15 @@ if latencies:
             - 1
         )
 
+
     p95_latency_ms = (
+
         sorted_latencies[
             p95_index
         ]
+
         * 1000
+
     )
 
 else:
@@ -526,6 +627,7 @@ average_active_tracks = (
     if active_track_counts
 
     else 0
+
 )
 
 
@@ -538,6 +640,7 @@ maximum_active_tracks = (
     if active_track_counts
 
     else 0
+
 )
 
 
@@ -557,6 +660,7 @@ for track_id in unique_track_ids:
         )
     )
 
+
     last_frame = (
         track_last_frame.get(
             track_id,
@@ -564,11 +668,13 @@ for track_id in unique_track_ids:
         )
     )
 
+
     lifetime = (
         last_frame
         - first_frame
         + 1
     )
+
 
     track_lifetimes.append(
         lifetime
@@ -584,6 +690,7 @@ average_track_lifetime = (
     if track_lifetimes
 
     else 0
+
 )
 
 
@@ -596,6 +703,7 @@ longest_track_lifetime = (
     if track_lifetimes
 
     else 0
+
 )
 
 
@@ -612,6 +720,7 @@ average_process_cpu = (
     if process_cpu_values
 
     else 0
+
 )
 
 
@@ -624,6 +733,7 @@ peak_process_cpu = (
     if process_cpu_values
 
     else 0
+
 )
 
 
@@ -636,6 +746,7 @@ average_system_cpu = (
     if system_cpu_values
 
     else 0
+
 )
 
 
@@ -648,6 +759,7 @@ peak_system_cpu = (
     if system_cpu_values
 
     else 0
+
 )
 
 
@@ -660,6 +772,7 @@ average_ram_mb = (
     if ram_values
 
     else 0
+
 )
 
 
@@ -672,6 +785,7 @@ peak_ram_mb = (
     if ram_values
 
     else 0
+
 )
 
 
@@ -688,6 +802,7 @@ report = {
 
         "tracker":
             "ByteTrack"
+
     },
 
 
@@ -703,6 +818,7 @@ report = {
             os.path.abspath(
                 MODEL_PATH
             )
+
     },
 
 
@@ -719,6 +835,7 @@ report = {
 
         "device":
             "CPU"
+
     },
 
 
@@ -743,6 +860,7 @@ report = {
 
         "total_frames":
             frame_count
+
     },
 
 
@@ -800,6 +918,7 @@ report = {
                 total_processing_time,
                 10
             )
+
     },
 
 
@@ -830,6 +949,7 @@ report = {
                     peak_ram_mb,
                     10
                 )
+
         },
 
 
@@ -846,7 +966,9 @@ report = {
                     peak_system_cpu,
                     10
                 )
+
         }
+
     },
 
 
@@ -866,7 +988,9 @@ report = {
             os.path.abspath(
                 OUTPUT_LOG
             )
+
     }
+
 }
 
 
@@ -875,15 +999,23 @@ report = {
 # ============================================================
 
 with open(
+
     OUTPUT_JSON,
+
     "w",
+
     encoding="utf-8"
+
 ) as f:
 
     json.dump(
+
         report,
+
         f,
+
         indent=4
+
     )
 
 
@@ -899,80 +1031,109 @@ YOLO11m + ByteTrack OBJECT TRACKING REPORT
 
 PROJECT
 ----------------------------------------------------------------------
+
 Name                 : YOLO11m + ByteTrack Object Tracking
+
 Tracker              : ByteTrack
 
 
 MODEL
 ----------------------------------------------------------------------
+
 Name                 : YOLO11m
+
 Format               : ONNX
+
 Model Path           : {os.path.abspath(MODEL_PATH)}
+
 Model Load Time      : {model_load_time:.6f} sec
 
 
 CONFIGURATION
 ----------------------------------------------------------------------
+
 Confidence Threshold : {CONF}
+
 IoU Threshold        : {IOU}
+
 Tracker Config       : ByteTrack
+
 Device               : CPU
 
 
 VIDEO
 ----------------------------------------------------------------------
+
 Input                : {os.path.abspath(VIDEO_PATH)}
+
 Resolution           : {width}x{height}
+
 FPS                  : {fps_input:.2f}
+
 Total Frames         : {frame_count}
 
 
 TRACKING STATISTICS
 ----------------------------------------------------------------------
+
 Frame Count              : {frame_count}
+
 Total Detections         : {total_detections}
+
 Unique Track IDs         : {len(unique_track_ids)}
+
 Average Active Tracks    : {average_active_tracks:.10f}
+
 Maximum Active Tracks    : {maximum_active_tracks}
+
 Average Track Lifetime   : {average_track_lifetime:.10f}
+
 Longest Track Lifetime   : {longest_track_lifetime}
+
 Track Loss Events        : {track_loss_events}
 
 
 PERFORMANCE
 ----------------------------------------------------------------------
+
 Average FPS              : {average_fps:.10f}
+
 Average Latency          : {average_latency_ms:.10f} ms
+
 P95 Latency              : {p95_latency_ms:.10f} ms
+
 Total Processing Time    : {total_processing_time:.10f} sec
+
 Pipeline Wall Time       : {pipeline_wall_time:.10f} sec
 
 
 RESOURCES - PROCESS
 ----------------------------------------------------------------------
+
 Average CPU              : {average_process_cpu:.10f}%
+
 Peak CPU                 : {peak_process_cpu:.10f}%
+
 Average RAM              : {average_ram_mb:.10f} MB
+
 Peak RAM                 : {peak_ram_mb:.10f} MB
 
 
 RESOURCES - SYSTEM
 ----------------------------------------------------------------------
+
 Average CPU              : {average_system_cpu:.10f}%
+
 Peak CPU                 : {peak_system_cpu:.10f}%
-
-
-GPU
-----------------------------------------------------------------------
-Average GPU              : N/A - CPU-only system
-Peak GPU                 : N/A - CPU-only system
-Peak GPU Memory          : N/A - CPU-only system
 
 
 OUTPUTS
 ----------------------------------------------------------------------
+
 Output Video             : {os.path.abspath(OUTPUT_VIDEO)}
+
 JSON Report              : {os.path.abspath(OUTPUT_JSON)}
+
 Log File                 : {os.path.abspath(OUTPUT_LOG)}
 
 
@@ -982,9 +1143,15 @@ END OF REPORT
 """
 
 
+# ============================================================
+# PRINT REPORT
+# ============================================================
+
 print()
 
-print(report_text)
+print(
+    report_text
+)
 
 
 # ============================================================
@@ -992,9 +1159,13 @@ print(report_text)
 # ============================================================
 
 with open(
+
     OUTPUT_LOG,
+
     "w",
+
     encoding="utf-8"
+
 ) as f:
 
     f.write(
@@ -1002,11 +1173,17 @@ with open(
     )
 
 
+# ============================================================
+# COMPLETION
+# ============================================================
+
 print()
 
 print(
     "Processing completed successfully."
 )
+
+print()
 
 print(
     f"Output video: "

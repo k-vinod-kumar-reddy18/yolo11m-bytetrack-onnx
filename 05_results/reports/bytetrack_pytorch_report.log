@@ -15,7 +15,7 @@ MODEL
 Name                 : YOLO11m
 Format               : PyTorch
 Model Path           : C:\Users\VinodKumarReddy\Downloads\yolo11m_bytetrack_onnx\01_model\yolo11m.pt
-Model Load Time      : 0.209782 sec
+Model Load Time      : 0.229695 sec
 
 
 CONFIGURATION
@@ -48,24 +48,24 @@ Track Loss Events        : 97
 
 PERFORMANCE
 ----------------------------------------------------------------------
-Average FPS              : 1.3891637384
-Average Latency          : 667.1717738479 ms
-P95 Latency              : 866.8517000042 ms
-Total Processing Time    : 718.4178311000 sec
-Pipeline Wall Time       : 718.6832279000 sec
+Average FPS              : 1.6065798096
+Average Latency          : 570.1310919840 ms
+P95 Latency              : 636.3038000000 ms
+Total Processing Time    : 621.1954078000 sec
+Pipeline Wall Time       : 621.5392729000 sec
 
 
 RESOURCES - PROCESS
 ----------------------------------------------------------------------
 Average CPU              : 0.0000000000%
 Peak CPU                 : 0.0000000000%
-Average RAM              : 681.0051196142 MB
-Peak RAM                 : 696.7968750000 MB
+Average RAM              : 682.2773907189 MB
+Peak RAM                 : 689.8085937500 MB
 
 
 RESOURCES - SYSTEM
 ----------------------------------------------------------------------
-Average CPU              : 92.5073146293%
+Average CPU              : 82.5034068136%
 Peak CPU                 : 100.0000000000%
 
 

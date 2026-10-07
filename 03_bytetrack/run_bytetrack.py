@@ -74,8 +74,8 @@ def get_file_size_mb(path):
     if os.path.exists(path):
 
         return round(
-            os.path.getsize(path) /
-            (1024 * 1024),
+            os.path.getsize(path)
+            / (1024 * 1024),
             2
         )
 
@@ -87,6 +87,7 @@ def get_file_size_mb(path):
 # ============================================================
 
 pipeline_start = time.perf_counter()
+
 
 print("=" * 70)
 
@@ -103,16 +104,25 @@ print()
 
 print("Loading YOLO11m PyTorch model...")
 
+
 model_load_start = time.perf_counter()
 
-model = YOLO(MODEL_PATH)
+
+model = YOLO(
+    MODEL_PATH
+)
+
 
 model_load_time = (
     time.perf_counter()
     - model_load_start
 )
 
-print("YOLO11m loaded successfully")
+
+print(
+    "YOLO11m loaded successfully"
+)
+
 
 print(
     f"Model Load Time: "
@@ -124,7 +134,10 @@ print(
 # OPEN VIDEO
 # ============================================================
 
-cap = cv2.VideoCapture(VIDEO_PATH)
+cap = cv2.VideoCapture(
+    VIDEO_PATH
+)
+
 
 if not cap.isOpened():
 
@@ -137,17 +150,20 @@ fps_input = cap.get(
     cv2.CAP_PROP_FPS
 )
 
+
 width = int(
     cap.get(
         cv2.CAP_PROP_FRAME_WIDTH
     )
 )
 
+
 height = int(
     cap.get(
         cv2.CAP_PROP_FRAME_HEIGHT
     )
 )
+
 
 total_frames_expected = int(
     cap.get(
@@ -163,10 +179,12 @@ print(
     f"{width}x{height}"
 )
 
+
 print(
     f"Input FPS: "
     f"{fps_input}"
 )
+
 
 print(
     f"Total Frames: "
@@ -182,12 +200,14 @@ fourcc = cv2.VideoWriter_fourcc(
     *"mp4v"
 )
 
+
 out = cv2.VideoWriter(
     OUTPUT_VIDEO,
     fourcc,
     fps_input,
     (width, height)
 )
+
 
 if not out.isOpened():
 
@@ -233,6 +253,26 @@ frame_count = 0
 
 
 # ============================================================
+# PROCESS MONITOR
+# ============================================================
+
+process = psutil.Process(
+    os.getpid()
+)
+
+# Initialize process CPU measurement.
+# This must be done ONCE before the frame loop.
+process.cpu_percent(
+    interval=None
+)
+
+# Initialize system CPU measurement.
+psutil.cpu_percent(
+    interval=None
+)
+
+
+# ============================================================
 # PROCESS VIDEO
 # ============================================================
 
@@ -242,6 +282,7 @@ processing_start = time.perf_counter()
 while True:
 
     ret, frame = cap.read()
+
 
     if not ret:
 
@@ -270,6 +311,7 @@ while True:
         device=DEVICE,
 
         verbose=False
+
     )
 
 
@@ -375,22 +417,13 @@ while True:
     # RESOURCE MONITORING
     # ========================================================
 
-    process = psutil.Process(
-        os.getpid()
+    process_cpu = process.cpu_percent(
+        interval=None
     )
 
 
-    process_cpu = (
-        process.cpu_percent(
-            interval=None
-        )
-    )
-
-
-    system_cpu = (
-        psutil.cpu_percent(
-            interval=None
-        )
+    system_cpu = psutil.cpu_percent(
+        interval=None
     )
 
 
@@ -404,9 +437,11 @@ while True:
         process_cpu
     )
 
+
     system_cpu_values.append(
         system_cpu
     )
+
 
     ram_values.append(
         ram_mb
@@ -456,21 +491,29 @@ while True:
     if SHOW_WINDOW:
 
         display_frame = cv2.resize(
+
             annotated_frame,
+
             (
                 DISPLAY_WIDTH,
                 DISPLAY_HEIGHT
             )
+
         )
 
 
         cv2.imshow(
+
             WINDOW_NAME,
+
             display_frame
+
         )
 
 
-        key = cv2.waitKey(1) & 0xFF
+        key = cv2.waitKey(
+            1
+        ) & 0xFF
 
 
         if key == ord("q"):
@@ -489,9 +532,7 @@ while True:
 # END PROCESSING
 # ============================================================
 
-processing_end = (
-    time.perf_counter()
-)
+processing_end = time.perf_counter()
 
 
 total_processing_time = (
@@ -519,12 +560,13 @@ cv2.destroyAllWindows()
 
 average_fps = (
 
-    frame_count /
-    total_processing_time
+    frame_count
+    / total_processing_time
 
     if total_processing_time > 0
 
     else 0
+
 )
 
 
@@ -536,8 +578,13 @@ average_latency_ms = (
     if latencies
 
     else 0
+
 )
 
+
+# ============================================================
+# P95 LATENCY
+# ============================================================
 
 if latencies:
 
@@ -547,8 +594,8 @@ if latencies:
 
 
     p95_index = int(
-        0.95 *
-        len(sorted_latencies)
+        0.95
+        * len(sorted_latencies)
     )
 
 
@@ -563,10 +610,13 @@ if latencies:
 
 
     p95_latency_ms = (
+
         sorted_latencies[
             p95_index
         ]
+
         * 1000
+
     )
 
 else:
@@ -587,6 +637,7 @@ average_active_tracks = (
     if active_track_counts
 
     else 0
+
 )
 
 
@@ -599,8 +650,13 @@ maximum_active_tracks = (
     if active_track_counts
 
     else 0
+
 )
 
+
+# ============================================================
+# TRACK LIFETIMES
+# ============================================================
 
 track_lifetimes = []
 
@@ -608,8 +664,7 @@ track_lifetimes = []
 for track_id in unique_track_ids:
 
     first_frame = (
-        track_first_frame
-        .get(
+        track_first_frame.get(
             track_id,
             0
         )
@@ -617,8 +672,7 @@ for track_id in unique_track_ids:
 
 
     last_frame = (
-        track_last_frame
-        .get(
+        track_last_frame.get(
             track_id,
             first_frame
         )
@@ -646,6 +700,7 @@ average_track_lifetime = (
     if track_lifetimes
 
     else 0
+
 )
 
 
@@ -658,6 +713,7 @@ longest_track_lifetime = (
     if track_lifetimes
 
     else 0
+
 )
 
 
@@ -674,6 +730,7 @@ average_process_cpu = (
     if process_cpu_values
 
     else 0
+
 )
 
 
@@ -686,6 +743,7 @@ peak_process_cpu = (
     if process_cpu_values
 
     else 0
+
 )
 
 
@@ -698,6 +756,7 @@ average_system_cpu = (
     if system_cpu_values
 
     else 0
+
 )
 
 
@@ -710,6 +769,7 @@ peak_system_cpu = (
     if system_cpu_values
 
     else 0
+
 )
 
 
@@ -722,6 +782,7 @@ average_ram_mb = (
     if ram_values
 
     else 0
+
 )
 
 
@@ -734,6 +795,7 @@ peak_ram_mb = (
     if ram_values
 
     else 0
+
 )
 
 
@@ -750,6 +812,7 @@ report = {
 
         "tracker":
             "ByteTrack"
+
     },
 
 
@@ -765,6 +828,7 @@ report = {
             os.path.abspath(
                 MODEL_PATH
             )
+
     },
 
 
@@ -781,6 +845,7 @@ report = {
 
         "device":
             "CPU"
+
     },
 
 
@@ -805,6 +870,7 @@ report = {
 
         "total_frames":
             frame_count
+
     },
 
 
@@ -862,6 +928,7 @@ report = {
                 total_processing_time,
                 10
             )
+
     },
 
 
@@ -892,6 +959,7 @@ report = {
                     peak_ram_mb,
                     10
                 )
+
         },
 
 
@@ -908,7 +976,9 @@ report = {
                     peak_system_cpu,
                     10
                 )
+
         }
+
     },
 
 
@@ -928,7 +998,9 @@ report = {
             os.path.abspath(
                 OUTPUT_LOG
             )
+
     }
+
 }
 
 
@@ -937,15 +1009,23 @@ report = {
 # ============================================================
 
 with open(
+
     OUTPUT_JSON,
+
     "w",
+
     encoding="utf-8"
+
 ) as f:
 
     json.dump(
+
         report,
+
         f,
+
         indent=4
+
     )
 
 
@@ -961,80 +1041,109 @@ YOLO11m + ByteTrack OBJECT TRACKING REPORT
 
 PROJECT
 ----------------------------------------------------------------------
+
 Name                 : YOLO11m + ByteTrack Object Tracking
+
 Tracker              : ByteTrack
 
 
 MODEL
 ----------------------------------------------------------------------
+
 Name                 : YOLO11m
+
 Format               : PyTorch
+
 Model Path           : {os.path.abspath(MODEL_PATH)}
+
 Model Load Time      : {model_load_time:.6f} sec
 
 
 CONFIGURATION
 ----------------------------------------------------------------------
+
 Confidence Threshold : {CONF}
+
 IoU Threshold        : {IOU}
+
 Tracker Config       : ByteTrack
+
 Device               : CPU
 
 
 VIDEO
 ----------------------------------------------------------------------
+
 Input                : {os.path.abspath(VIDEO_PATH)}
+
 Resolution           : {width}x{height}
+
 FPS                  : {fps_input:.2f}
+
 Total Frames         : {frame_count}
 
 
 TRACKING STATISTICS
 ----------------------------------------------------------------------
+
 Frame Count              : {frame_count}
+
 Total Detections         : {total_detections}
+
 Unique Track IDs         : {len(unique_track_ids)}
+
 Average Active Tracks    : {average_active_tracks:.10f}
+
 Maximum Active Tracks    : {maximum_active_tracks}
+
 Average Track Lifetime   : {average_track_lifetime:.10f}
+
 Longest Track Lifetime   : {longest_track_lifetime}
+
 Track Loss Events        : {track_loss_events}
 
 
 PERFORMANCE
 ----------------------------------------------------------------------
+
 Average FPS              : {average_fps:.10f}
+
 Average Latency          : {average_latency_ms:.10f} ms
+
 P95 Latency              : {p95_latency_ms:.10f} ms
+
 Total Processing Time    : {total_processing_time:.10f} sec
+
 Pipeline Wall Time       : {pipeline_wall_time:.10f} sec
 
 
 RESOURCES - PROCESS
 ----------------------------------------------------------------------
+
 Average CPU              : {average_process_cpu:.10f}%
+
 Peak CPU                 : {peak_process_cpu:.10f}%
+
 Average RAM              : {average_ram_mb:.10f} MB
+
 Peak RAM                 : {peak_ram_mb:.10f} MB
 
 
 RESOURCES - SYSTEM
 ----------------------------------------------------------------------
+
 Average CPU              : {average_system_cpu:.10f}%
+
 Peak CPU                 : {peak_system_cpu:.10f}%
-
-
-GPU
-----------------------------------------------------------------------
-Average GPU              : N/A - CPU-only system
-Peak GPU                 : N/A - CPU-only system
-Peak GPU Memory         : N/A - CPU-only system
 
 
 OUTPUTS
 ----------------------------------------------------------------------
+
 Output Video             : {os.path.abspath(OUTPUT_VIDEO)}
+
 JSON Report              : {os.path.abspath(OUTPUT_JSON)}
+
 Log File                 : {os.path.abspath(OUTPUT_LOG)}
 
 
@@ -1044,9 +1153,15 @@ END OF REPORT
 """
 
 
+# ============================================================
+# PRINT REPORT
+# ============================================================
+
 print()
 
-print(report_text)
+print(
+    report_text
+)
 
 
 # ============================================================
@@ -1054,9 +1169,13 @@ print(report_text)
 # ============================================================
 
 with open(
+
     OUTPUT_LOG,
+
     "w",
+
     encoding="utf-8"
+
 ) as f:
 
     f.write(
@@ -1064,11 +1183,17 @@ with open(
     )
 
 
+# ============================================================
+# COMPLETION
+# ============================================================
+
 print()
 
 print(
     "Processing completed successfully."
 )
+
+print()
 
 print(
     f"Output video: "

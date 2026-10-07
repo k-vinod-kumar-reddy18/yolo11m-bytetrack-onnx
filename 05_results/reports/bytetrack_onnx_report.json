@@ -29,20 +29,20 @@
         "maximum_active_tracks": 18,
         "average_track_lifetime": 275,
         "longest_track_lifetime": 998,
-        "average_fps": 1.1141539005,
-        "average_latency_ms": 847.6113774548,
-        "p95_latency_ms": 1123.2947999961,
-        "total_processing_time_seconds": 895.7469875
+        "average_fps": 1.1855343218,
+        "average_latency_ms": 789.2317511022,
+        "p95_latency_ms": 1072.9893999996,
+        "total_processing_time_seconds": 841.8145149
     },
     "resources": {
         "process": {
-            "average_cpu_percent": 0.0,
-            "peak_cpu_percent": 0.0,
-            "average_ram_mb": 836.8987271418,
-            "peak_ram_mb": 845.52734375
+            "average_cpu_percent": 243.8975951904,
+            "peak_cpu_percent": 283.5,
+            "average_ram_mb": 834.9817995366,
+            "peak_ram_mb": 845.8046875
         },
         "system": {
-            "average_cpu_percent": 78.4509018036,
+            "average_cpu_percent": 75.5096192385,
             "peak_cpu_percent": 100.0
         }
     },
