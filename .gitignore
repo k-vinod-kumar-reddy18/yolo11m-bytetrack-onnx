@@ -1,3 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+# Generated output videos
+*.mp4
+*.avi
+05_results/interface/
